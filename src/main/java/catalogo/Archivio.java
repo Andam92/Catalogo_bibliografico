@@ -1,10 +1,13 @@
 package catalogo;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Archivio {
 
-	public static ArrayList<Elemento> archivio = new ArrayList<Elemento>();
+	public static List<Elemento> archivio = new ArrayList<Elemento>();
 	
 	public static void main(String[] args) {
 		
@@ -43,13 +46,39 @@ public class Archivio {
 		archivio.get(8).getElemento();
 
 		
+		//AGGIUNTA DI UN ELEMENTO
+		System.out.println("ESERCIZIO #1");
+		aggiungiElemento(libro2);
 		
+		//RIMOZIONE ELEMENTO
+		System.out.println("ESERCIZIO #2");
+
+		System.out.println(archivio.size());  // verifico size prima della rimozione
+		
+		rimuoviElemento("ID12850988");
+		
+		System.out.println(archivio.size());  // confermo rimozione
+		
+		
+		//RICERCA PER ANNO
+		System.out.println("ESERCIZIO #3");
+
+		ricercaPerAnno(2021);
+
+		
+		//RICERCA PER AUTORE
+		System.out.println("ESERCIZIO #4");
+			
+		ricercaPerAutore("Cornwell");
+
+	
 		
 
 		
 		// archivio.get(2).getElemento();
 		
-		creaId();
+	//->	creaId();
+		
 		//ID Libri (ID12850988, ID30648884, ID46914146, ID83587857, ID70046739, ID83126072, ID86384332)
 		//ID Rivista (ID83379679, ID05340011, ID33595094, ID17625363, ID88766917, ID39829745)
 				
@@ -64,6 +93,71 @@ public class Archivio {
 		}
 		System.out.println(id);
 		return id;
+	}
+	
+	
+	//AGGIUNGI ELEMENTO
+	public static void aggiungiElemento(Elemento elemento) {
+		
+		Stream.Builder<Elemento> builder = Stream.builder();
+		Stream<Elemento> streamElementi = archivio.stream();
+		streamElementi.forEach(e -> builder.add(e));
+		builder.add(elemento);
+		archivio = builder.build().collect(Collectors.toList());
+		System.out.println("Aggiunto nuovo elemento:  ");
+		//Richiamo metodo per visualizzare ultimo elemento array
+		archivio.get(archivio.size() - 1).getElemento();
+				
+	}
+	
+	//RIMUOVI ELEMENTO PER CODICE
+	public static void rimuoviElemento(String id) {
+		
+		Stream.Builder<Elemento> builder = Stream.builder();
+		Stream<Elemento> streamElementi = archivio.stream();
+		streamElementi.filter(e -> !e.codiceISBN.equals(id)).forEach(e -> builder.add(e));
+		archivio = builder.build().collect(Collectors.toList());
+		System.out.println("Rimosso elemento con ISBN: ");
+		archivio.get(archivio.size() - 1).getElemento();
+	
+	}
+	
+	
+	//RICERCA PER ANNO
+	public static void ricercaPerAnno(Integer annoCercato) {
+		
+		Stream.Builder<Elemento> builder = Stream.builder();
+		Stream<Elemento> streamElementi = archivio.stream();
+		System.out.println("Elementi pubblicati nell'anno " + annoCercato + ": ");
+		streamElementi.filter(e -> e.annoPubblicazione == annoCercato).forEach(e -> {
+			e.getElemento();
+			builder.add(e);
+				});
+		
+		List <Elemento> elementiFiltrati = builder.build().collect(Collectors.toList());
+		if (elementiFiltrati.size() == 0) {
+			System.out.println("Non ci sono libri o riviste pubblicati nel " + annoCercato);
+		}
+	}
+	
+	
+	//RICERCA PER AUTORE
+	public static void ricercaPerAutore(String autoreCercato) {
+		
+		Stream.Builder<Elemento> builder = Stream.builder();
+		Stream<Elemento> streamElementi = archivio.stream();
+		System.out.println("Libri scritti da " + autoreCercato + ": ");
+		streamElementi.filter(e -> e instanceof Libro && ((Libro) e).autore.equals(autoreCercato))
+		.forEach(e -> {
+				e.getElemento();
+				builder.add(e);			
+				});
+		
+		List <Elemento> elementiFiltrati = builder.build().collect(Collectors.toList());
+		if (elementiFiltrati.size() == 0) {
+			System.out.println("Non ci sono libri scritti da " + autoreCercato);
+		}
+
 	}
 
 }
