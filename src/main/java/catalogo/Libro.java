@@ -1,5 +1,7 @@
 package catalogo;
 
+
+
 public class Libro extends Elemento {
 	
 	String autore;

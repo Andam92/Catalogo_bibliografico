@@ -1,6 +1,8 @@
 package catalogo;
 
-public class Elemento {
+import java.io.Serializable;
+
+public class Elemento implements Serializable {
 
 	public String codiceISBN;
 	public String titolo;
@@ -15,9 +17,9 @@ public class Elemento {
 	 }
 	 
 		public void getElemento() {
-			System.out.println("ISBN: " + this.codiceISBN);
 			System.out.println("Titolo: " + this.titolo);		
 			System.out.println("Pubblicato nel: " + this.annoPubblicazione);
+			System.out.println("ISBN: " + this.codiceISBN);
 			System.out.println();
 		}
 }
